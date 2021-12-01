@@ -13,4 +13,5 @@ public interface VRegistro {
     public void showPromedioCurso(double promedio);
     public void showAllNotas(String[] cabecera, Object[][] contenido);
     public void iniciar();
+    public void mostrarMensaje(String mensaje);
 }

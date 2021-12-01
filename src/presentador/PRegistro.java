@@ -15,10 +15,10 @@ public class PRegistro {
         this.m_registro = new MRegistro();
     }
     
-    public void agregar(){
+    public void agregar(){        
        obtenerDatos();       
        hacerCalculos();
-       actualizarVista();     
+       actualizarVista();
     }
     public void quitar(){
         m_registro.quitarNota(v_registro.getCodeActualTableSeleccionada());
@@ -31,7 +31,13 @@ public class PRegistro {
         nota.setNombreAlumno(v_registro.getIngresoNombre());
         nota.setNota(v_registro.getIngresoNota());
         nota.calcularCondicion();
-        m_registro.agregarNota(nota);        
+        m_registro.quitarNota(nota.getCodigoAlumno());
+        if(!nota.getCodigoAlumno().equals("") && !nota.getNombreAlumno().equals("") && nota.getNota()!= -1){
+            m_registro.agregarNota(nota); 
+            v_registro.mostrarMensaje("");
+        }
+            
+      
     }
     public void actualizarVista(){
         String[] cabecera = {"Codigo","Nombre","Nota","Condición"};
@@ -55,10 +61,15 @@ public class PRegistro {
     
    
     private void hacerCalculos(){
-        Nota bestAlumno = m_registro.calcularBestAlumno();      
-        m_registro.calcularPromedioTotal();       
-        v_registro.showPromedioCurso(m_registro.getPromedioTotal());
-        v_registro.showSalidaBestAlumno(bestAlumno.getNombreAlumno(),bestAlumno.getNota());
+           Nota bestAlumno = m_registro.calcularBestAlumno();
+            m_registro.calcularPromedioTotal();     
+            v_registro.showPromedioCurso(m_registro.getPromedioTotal());
+            if(bestAlumno!=null){
+                
+                v_registro.showSalidaBestAlumno(bestAlumno.getNombreAlumno(),bestAlumno.getNota());
+            }else{
+                v_registro.showSalidaBestAlumno("",0);
+            }
     }
     
    

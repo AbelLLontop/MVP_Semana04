@@ -12,7 +12,7 @@ import presentador.PRegistro;
  *
  * @author ABEL
  */
-public class VRegistro_Swing extends javax.swing.JFrame implements VRegistro{
+public class VRegistro_Swing extends javax.swing.JFrame implements VRegistro {
 
     private PRegistro p_registro;
 
@@ -50,7 +50,7 @@ public class VRegistro_Swing extends javax.swing.JFrame implements VRegistro{
         jLabel9 = new javax.swing.JLabel();
         input_mejorAlumno_nota = new javax.swing.JTextField();
         jSeparator2 = new javax.swing.JSeparator();
-        jLabel10 = new javax.swing.JLabel();
+        notificacion = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -140,6 +140,11 @@ public class VRegistro_Swing extends javax.swing.JFrame implements VRegistro{
         btn_quitar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btn_quitar.setFocusPainted(false);
         btn_quitar.setMargin(new java.awt.Insets(0, 0, 0, 0));
+        btn_quitar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_quitarActionPerformed(evt);
+            }
+        });
         jPanel4.add(btn_quitar, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 200, 100, 40));
 
         btn_agregar.setBackground(new java.awt.Color(124, 168, 57));
@@ -273,12 +278,12 @@ public class VRegistro_Swing extends javax.swing.JFrame implements VRegistro{
         jSeparator2.setOrientation(javax.swing.SwingConstants.VERTICAL);
         jPanel5.add(jSeparator2, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 350, 18, 60));
 
-        jLabel10.setBackground(new java.awt.Color(255, 0, 0));
-        jLabel10.setFont(new java.awt.Font("Calibri", 1, 14)); // NOI18N
-        jLabel10.setForeground(new java.awt.Color(255, 51, 51));
-        jLabel10.setText("MENSAJE: Error de sintaxis");
-        jLabel10.setVerticalAlignment(javax.swing.SwingConstants.TOP);
-        jPanel5.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 350, 250, 60));
+        notificacion.setBackground(new java.awt.Color(255, 0, 0));
+        notificacion.setFont(new java.awt.Font("Calibri", 1, 14)); // NOI18N
+        notificacion.setForeground(new java.awt.Color(255, 51, 51));
+        notificacion.setText("MENSAJE: Error de sintaxis");
+        notificacion.setVerticalAlignment(javax.swing.SwingConstants.TOP);
+        jPanel5.add(notificacion, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 350, 250, 60));
 
         getContentPane().add(jPanel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, -3, 780, 420));
 
@@ -286,17 +291,21 @@ public class VRegistro_Swing extends javax.swing.JFrame implements VRegistro{
     }// </editor-fold>//GEN-END:initComponents
 
     private void btn_agregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_agregarActionPerformed
-       p_registro.agregar();
+        p_registro.agregar();
     }//GEN-LAST:event_btn_agregarActionPerformed
+
+    private void btn_quitarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_quitarActionPerformed
+        p_registro.quitar();
+    }//GEN-LAST:event_btn_quitarActionPerformed
 
     /**
      * @param args the command line arguments
      */
- public void iniciar() {
-       pack();
-       setLocationRelativeTo(null);
-       setVisible(true);
-       
+    public void iniciar() {
+        pack();
+        setLocationRelativeTo(null);
+        setVisible(true);
+
     }
 
 
@@ -310,7 +319,6 @@ public class VRegistro_Swing extends javax.swing.JFrame implements VRegistro{
     private javax.swing.JTextField input_nota;
     private javax.swing.JTextField input_promedioTotal;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -327,6 +335,7 @@ public class VRegistro_Swing extends javax.swing.JFrame implements VRegistro{
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
+    private javax.swing.JLabel notificacion;
     private javax.swing.JTable tabla;
     // End of variables declaration//GEN-END:variables
 
@@ -337,33 +346,60 @@ public class VRegistro_Swing extends javax.swing.JFrame implements VRegistro{
 
     @Override
     public String getIngresoCodigo() {
-  
-        String codigo = input_codigo.getText();
+        Validacion validacion = new Validacion();
+        String codigo = validacion.inCodigo(input_codigo.getText());
+        if (!validacion.estadoValidacionDatos()) {
+            mostrarMensaje(validacion.getMensaje());
+        }
+
         return codigo;
+
+    }
+
+    @Override
+    public void mostrarMensaje(String mensaje) {
+        notificacion.setText("<html>" + mensaje + "</html>");
     }
 
     @Override
     public String getIngresoNombre() {
-        String nombre = input_nombre.getText();
+        Validacion validacion = new Validacion();
+        String nombre = validacion.inNombre(input_nombre.getText());
+        if (!validacion.estadoValidacionDatos()) {
+            mostrarMensaje(validacion.getMensaje());
+        }
         return nombre;
     }
 
     @Override
     public double getIngresoNota() {
-        double nota = Double.parseDouble(input_nota.getText());
+        Validacion validacion = new Validacion();
+        double nota = validacion.inDouble(input_nota.getText());
+        if (!validacion.estadoValidacionDatos()) {
+            mostrarMensaje(validacion.getMensaje());
+        }
         return nota;
     }
 
     @Override
     public String getCodeActualTableSeleccionada() {
-       // int positionElemento = tabla.getSelectedRow();
-        return null;
+        Validacion validacion = new Validacion();
+        int positionElemento = tabla.getSelectedRow();
+        String codigo;
+        String datos = "";
+        if (positionElemento != -1) {
+            datos = (String) tabla.getValueAt(positionElemento, 0);
+        }
+        codigo = validacion.inRegistro(datos);
+        mostrarMensaje(validacion.getMensaje());
+
+        return codigo;
     }
 
     @Override
     public void showSalidaBestAlumno(String nombre, double nota) {
         input_mejorAlumno_nombre.setText(nombre);
-        input_mejorAlumno_nota.setText(Double.toString(nota));    
+        input_mejorAlumno_nota.setText(Double.toString(nota));
     }
 
     @Override
