@@ -12,4 +12,5 @@ public interface VRegistro {
     public void showSalidaBestAlumno(String nombre, double nota);
     public void showPromedioCurso(double promedio);
     public void showAllNotas(String[] cabecera, Object[][] contenido);
+    public void iniciar();
 }

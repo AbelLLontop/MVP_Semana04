@@ -54,7 +54,6 @@ public class PRegistro {
     }
     
    
-    
     private void hacerCalculos(){
         Nota bestAlumno = m_registro.calcularBestAlumno();      
         m_registro.calcularPromedioTotal();       

@@ -43,7 +43,7 @@ public class Nota {
 
     
     private void condicionarRango(int min,int max,String mensaje){
-        if((nota<=min && nota<=max)){
+        if((nota>=min && nota<=max)){
             condicion= mensaje;
         }     
     }
